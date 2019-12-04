@@ -95,12 +95,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
         List<String> allWords = getWords(text);
         Map<String, Integer> countWordsRepetitionsMap = new LinkedHashMap<>();
         for (String s : allWords) {
-            int repetitionCounter = 0;
-            for (String string : allWords) {
-                if (s.equals(string)) {
-                    repetitionCounter++;
-                }
-            }
+            int repetitionCounter = Collections.frequency(allWords, s);
             countWordsRepetitionsMap.put(s, repetitionCounter);
         }
         return countWordsRepetitionsMap;
@@ -117,14 +112,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
         ArrayList<String> allWords = (ArrayList<String>) getWords(text);
-
-        class wordsLengthComparator implements Comparator<String> {
+        allWords.sort(new Comparator<String>() {
             @Override
             public int compare(String o1, String o2) {
                 return direction == Direction.ASC ? o1.length() - o2.length() : o2.length() - o1.length();
             }
-        }
-        allWords.sort(new wordsLengthComparator());
+        });
         return allWords;
     }
 }
