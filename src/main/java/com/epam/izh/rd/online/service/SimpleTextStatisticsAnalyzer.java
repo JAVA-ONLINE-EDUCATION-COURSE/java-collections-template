@@ -21,8 +21,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        text = text.replaceAll("[\\W\\p{Space}]", "");
-        return text.length();
+        List<String> allWords = getWords(text);
+        int sumLengthOfWords = 0;
+        for (String s  : allWords) {
+            sumLengthOfWords += s.length();
+        }
+        return sumLengthOfWords;
     }
 
     /**
@@ -33,8 +37,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        List<String> allWords = getWords(text);
-        return allWords.size();
+        return getWords(text).size();
     }
 
     /**
@@ -44,9 +47,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        List<String> allWords = getWords(text);
-        Set<String> uniqueWords = new HashSet<>(allWords);
-        return uniqueWords.size();
+        return getUniqueWords(text).size();
     }
 
     /**
@@ -59,14 +60,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        List<String> listOfWords = new ArrayList<>();
-        String [] arrayOfWords = text.split("[\\p{Punct}\\p{Space}]");
-        for (String s : arrayOfWords) {
-            if (s != null && s.length() > 0) {
-                listOfWords.add(s);
-            }
-        }
-        return listOfWords;
+        return new ArrayList<>(Arrays.asList(text.split("\\W+")));
     }
 
     /**
@@ -79,8 +73,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        List<String> allWords = getWords(text);
-        return new HashSet<>(allWords);
+        return new HashSet<>(getWords(text));
     }
 
     /**
