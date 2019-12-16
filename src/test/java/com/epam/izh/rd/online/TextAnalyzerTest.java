@@ -67,13 +67,13 @@ public class TextAnalyzerTest {
     @Test
     @DisplayName("Тест метода TextStatisticsAnalyzer.sortWordsByLength(String text, ASC)")
     void testSortWordsByLength() {
-        assertEquals(getSortedList(Direction.ASC), simpleTextStatisticsAnalyzer.sortWordsByLength(text, Direction.ASC));
+        assertIsListSorted(simpleTextStatisticsAnalyzer.sortWordsByLength(text, Direction.ASC),Direction.ASC);
     }
 
     @Test
     @DisplayName("Тест метода TextStatisticsAnalyzer.sortWordsByLength(String text, DESC)")
     void testSortWordsByLengthDesc() {
-        assertEquals(getSortedList(Direction.DESC), simpleTextStatisticsAnalyzer.sortWordsByLength(text, Direction.DESC));
+        assertIsListSorted(simpleTextStatisticsAnalyzer.sortWordsByLength(text, Direction.DESC),Direction.DESC);
     }
 
     @Test
@@ -115,13 +115,13 @@ public class TextAnalyzerTest {
     @Test
     @DisplayName("Тест метода StreamApiTextStatisticsAnalyzer.sortWordsByLength(String text, ASC)")
     void testSortWordsByLengthStream() {
-        assertEquals(getSortedList(Direction.ASC), streamApiTextStatisticsAnalyzer.sortWordsByLength(text, Direction.ASC));
+        assertIsListSorted(streamApiTextStatisticsAnalyzer.sortWordsByLength(text, Direction.ASC),Direction.ASC);
     }
 
     @Test
     @DisplayName("Тест метода StreamApiTextStatisticsAnalyzer.sortWordsByLength(String text, DESC)")
     void testSortWordsByLengthDescStream() {
-        assertEquals(getSortedList(Direction.DESC), streamApiTextStatisticsAnalyzer.sortWordsByLength(text, Direction.DESC));
+        assertIsListSorted(streamApiTextStatisticsAnalyzer.sortWordsByLength(text, Direction.DESC),Direction.DESC);
     }
 
     @Test
@@ -140,16 +140,6 @@ public class TextAnalyzerTest {
     @DisplayName("Тест метода StreamApiTextStatisticsAnalyzer.countNumberOfWordsRepetitions(String text)")
     void testCountNumberOfWordsRepetitionsStream() {
         assertRepetitions(streamApiTextStatisticsAnalyzer.countNumberOfWordsRepetitions(text));
-    }
-
-    private List<String> getSortedList(Direction direction) {
-        Comparator<String> stringComparator = direction.equals(Direction.ASC) ?
-                Comparator.comparing(String::length) :
-                Comparator.comparing(String::length).reversed();
-
-        return wordsList.stream()
-                .sorted(stringComparator)
-                .collect(Collectors.toList());
     }
 
     private static List<String> readWordsFromProperties() {
@@ -187,5 +177,28 @@ public class TextAnalyzerTest {
                 fail();
             }
         }
+    }
+
+    private void assertIsListSorted(List<String> list, Direction direction) {
+        Comparator<String> stringComparator = getStringComparator(direction);
+
+        if (list.isEmpty()) {
+            fail();
+        }
+
+        for(int i = 0; i < list.size() - 1; i++) {
+            String cur = list.get(i);
+            String next = list.get(i+1);
+
+            if (stringComparator.compare(cur, next) > 0) {
+                fail();
+            }
+        }
+    }
+
+    private Comparator<String> getStringComparator(Direction direction) {
+        return direction.equals(Direction.ASC) ?
+                Comparator.comparing(String::length) :
+                Comparator.comparing(String::length).reversed();
     }
 }
