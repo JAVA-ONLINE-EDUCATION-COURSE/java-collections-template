@@ -4,7 +4,6 @@ import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
 
 /**
@@ -15,6 +14,7 @@ import static java.util.Collections.emptyMap;
  * При необходимости, можно создать внутри данного класса дополнительные вспомогательные приватные методы.
  */
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
+
     private SimpleRegExp simpleRegExp = new SimpleRegExp();
 
     /**
@@ -25,7 +25,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        List<String> words = getWords(text);
+        int sum = 0;
+        for (String word : words) {
+            sum += word.length();
+        }
+        return sum;
     }
 
     /**
@@ -97,6 +102,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        List<String> sortWords = getWords(text);
+        if (direction == Direction.ASC) {
+            sortWords.sort(new SimpleStringLengthComparator());
+        } else {
+            sortWords.sort((new SimpleStringLengthComparator()).reversed());
+        }
+        return sortWords;
     }
 }
