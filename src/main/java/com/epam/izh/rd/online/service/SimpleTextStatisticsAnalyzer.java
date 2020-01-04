@@ -4,7 +4,8 @@ import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 
 /**
  * Совет:
@@ -14,6 +15,7 @@ import static java.util.Collections.*;
  * При необходимости, можно создать внутри данного класса дополнительные вспомогательные приватные методы.
  */
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
+    private SimpleRegExp simpleRegExp = new SimpleRegExp();
 
     /**
      * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаким препинания итд не считаются).
@@ -34,7 +36,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +46,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return getUniqueWords(text).size();
     }
 
     /**
@@ -57,7 +59,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return Arrays.asList(text.split(simpleRegExp.REG_EXP_WORD()));
     }
 
     /**
@@ -70,7 +72,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return new HashSet<>(getWords(text));
     }
 
     /**
