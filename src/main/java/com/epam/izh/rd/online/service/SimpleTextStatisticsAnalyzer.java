@@ -4,7 +4,7 @@ import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
 
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptyList;
 
 /**
  * Совет:
@@ -64,6 +64,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
+        if (text == null) {
+            return emptyList();
+        }
         return Arrays.asList(text.split(simpleRegExp.REG_EXP_WORD()));
     }
 
@@ -89,7 +92,19 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map<String, Integer> map = new HashMap<>();
+        List<String> list = getWords(text);
+        Set<String> set = getUniqueWords(text);
+        for (String word : set) {
+            int counterWord = 0;
+            for (String s : list) {
+                if (word.equals(s)) {
+                    counterWord++;
+                }
+            }
+            map.put(word, counterWord);
+        }
+        return map;
     }
 
     /**
