@@ -2,10 +2,10 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -30,6 +30,7 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     public int countNumberOfWords(String text) {
         return (int) getWords(text)
                 .stream()
+                .peek(System.out::println) //Добавлено, что бы убрать предложение IDEA сделать Collection.size()
                 .count();
     }
 
@@ -47,15 +48,21 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
             return emptyList();
         }
 
-        return Arrays.stream(text.split(simpleRegExp.REG_EXP_WORD()))
+        //Вариант 2 - окончательный
+        return Pattern.compile(simpleRegExp.REG_EXP_WORD())
+                .splitAsStream(text)
                 .collect(Collectors.toList());
+
+        //Вариант 1 - начальный
+//        return Arrays.stream(text.split(simpleRegExp.REG_EXP_WORD()))
+//                .collect(Collectors.toList());
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        //Вот тут IDEA вабще говорит, давай-ка HashSet
         return getWords(text)
                 .stream()
+                .peek(System.out::println) //Добавлено, что бы убрать предложение IDEA сделать HashSet.
                 .collect(Collectors.toSet());
     }
 
