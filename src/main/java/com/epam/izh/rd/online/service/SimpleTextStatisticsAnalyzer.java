@@ -4,7 +4,7 @@ import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 /**
  * Совет:
@@ -14,7 +14,6 @@ import static java.util.Collections.*;
  * При необходимости, можно создать внутри данного класса дополнительные вспомогательные приватные методы.
  */
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
-
     /**
      * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаким препинания итд не считаются).
      * Например для текста "One, I - tWo!!" - данный метод должен вернуть 7.
@@ -23,7 +22,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        List<String> words = getWords(text);
+        int sum = 0;
+
+        for (String word : words) {
+            sum += word.length();
+        }
+
+        return sum;
     }
 
     /**
@@ -34,7 +40,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +50,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return getUniqueWords(text).size();
     }
 
     /**
@@ -57,7 +63,11 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        if (text == null) {
+            return emptyList();
+        }
+
+        return Arrays.asList(text.split(new SimpleRegExp().REG_EXP_WORD()));
     }
 
     /**
@@ -70,7 +80,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return new HashSet<>(getWords(text));
     }
 
     /**
@@ -82,7 +92,21 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map<String, Integer> map = new HashMap<>();
+        List<String> list = getWords(text);
+        Set<String> set = getUniqueWords(text);
+
+        for (String word : set) {
+            int counterWord = 0;
+            for (String s : list) {
+                if (word.equals(s)) {
+                    counterWord++;
+                }
+            }
+            map.put(word, counterWord);
+        }
+
+        return map;
     }
 
     /**
@@ -95,6 +119,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        List<String> sortWords = getWords(text);
+
+        if (direction == Direction.ASC) {
+            sortWords.sort(new SimpleStringLengthComparator());
+        } else {
+            sortWords.sort((new SimpleStringLengthComparator()).reversed());
+        }
+
+        return sortWords;
     }
 }
