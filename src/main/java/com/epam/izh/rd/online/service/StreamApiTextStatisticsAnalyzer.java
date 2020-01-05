@@ -2,14 +2,11 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 /**
  * Данный класс обязан использовать StreamApi из функционала Java 8. Функциональность должна быть идентична
@@ -18,8 +15,6 @@ import static java.util.Collections.emptyMap;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     //Надеюсь, я правильно понял, чего от меня хотят в этом задании, просто какие-то Stream'ы получаются
     // слишком избыточными (неуместными), не знаю, как еще сказать.
-
-    private SimpleRegExp simpleRegExp = new SimpleRegExp();
 
     @Override
     public int countSumLengthOfWords(String text) {
@@ -49,12 +44,12 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
         }
 
         //Вариант 2 - окончательный
-        return Pattern.compile(simpleRegExp.REG_EXP_WORD())
+        return Pattern.compile(new SimpleRegExp().REG_EXP_WORD())
                 .splitAsStream(text)
                 .collect(Collectors.toList());
 
         //Вариант 1 - начальный
-//        return Arrays.stream(text.split(simpleRegExp.REG_EXP_WORD()))
+//        return Arrays.stream(text.split(new SimpleRegExp().REG_EXP_WORD()))
 //                .collect(Collectors.toList());
     }
 
@@ -68,7 +63,18 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map<String, Integer> map = new HashMap<>();
+        getWords(text)
+                .stream()
+                .distinct()
+                .sequential() //Специально добавил, т.к. в лекции Сергея Куценко, было сказано, что forEach - зло,
+                // когда он многопоточный (нужно самому следить за правильность работы), поэтому
+                // высталяю признак работы в одном потоке
+                .forEach(s -> map.put(s, (int) getWords(text)
+                        .stream()
+                        .filter(s::equals)
+                        .count()));
+        return map;
     }
 
     @Override

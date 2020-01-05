@@ -14,9 +14,6 @@ import static java.util.Collections.emptyList;
  * При необходимости, можно создать внутри данного класса дополнительные вспомогательные приватные методы.
  */
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
-
-    private SimpleRegExp simpleRegExp = new SimpleRegExp();
-
     /**
      * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаким препинания итд не считаются).
      * Например для текста "One, I - tWo!!" - данный метод должен вернуть 7.
@@ -27,9 +24,11 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     public int countSumLengthOfWords(String text) {
         List<String> words = getWords(text);
         int sum = 0;
+
         for (String word : words) {
             sum += word.length();
         }
+
         return sum;
     }
 
@@ -67,7 +66,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
         if (text == null) {
             return emptyList();
         }
-        return Arrays.asList(text.split(simpleRegExp.REG_EXP_WORD()));
+
+        return Arrays.asList(text.split(new SimpleRegExp().REG_EXP_WORD()));
     }
 
     /**
@@ -95,6 +95,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
         Map<String, Integer> map = new HashMap<>();
         List<String> list = getWords(text);
         Set<String> set = getUniqueWords(text);
+
         for (String word : set) {
             int counterWord = 0;
             for (String s : list) {
@@ -104,6 +105,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
             }
             map.put(word, counterWord);
         }
+
         return map;
     }
 
@@ -118,11 +120,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
         List<String> sortWords = getWords(text);
+
         if (direction == Direction.ASC) {
             sortWords.sort(new SimpleStringLengthComparator());
         } else {
             sortWords.sort((new SimpleStringLengthComparator()).reversed());
         }
+
         return sortWords;
     }
 }
