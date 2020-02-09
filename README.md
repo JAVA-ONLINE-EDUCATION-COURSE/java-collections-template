@@ -2,7 +2,7 @@
 
 Дан фрагмент текста по адресу `src/main/resources/sample-text.txt`. Вам необходимо реализовать 2 сервиса:
 * `SimpleTextStatisticsAnalyzer`
-* `StreapApiTextStatisticsAnalyzer`
+* `StreamApiTextStatisticsAnalyzer`
 
 Они имплементируют интерфейс `TextStatisticsAnalyzer`, в котором объявлены несколько методов, которые используют текст в
 качестве параметра, например:
@@ -12,5 +12,5 @@
 и так далее
 
 В процессе выполнения нужно использовать классы из `Java Collections Api`. В сервисе `SimpleTextStatisticsAnalyzer` методы
-должны быть имплементированы с использованием циклов, а в сервисе `StreapApiTextStatisticsAnalyzer` с использованием 
+должны быть имплементированы с использованием циклов, а в сервисе `StreamApiTextStatisticsAnalyzer` с использованием 
 `Stream API`
