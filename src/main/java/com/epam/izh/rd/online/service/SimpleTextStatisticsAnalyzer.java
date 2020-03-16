@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.service;
 import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Collections.*;
 
@@ -23,7 +25,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        List<String> words = getWords(text);
+        int sum = 0;
+        for (String word:words) {
+            char[] sub = word.toCharArray();
+            sum+=sub.length;
+        }
+        return sum;
     }
 
     /**
@@ -34,7 +42,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +52,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        List<String> words = getWords(text);
+        SortedSet<String> wordsSort = new TreeSet<>(words);
+        return wordsSort.size();
     }
 
     /**
@@ -57,7 +67,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        Pattern pattern = Pattern.compile("\\w+", Pattern.UNICODE_CHARACTER_CLASS | Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        List<String> words = new ArrayList<>(Collections.emptyList());
+        while (matcher.find()){
+            words.add(matcher.group());
+        }
+        return words;
     }
 
     /**
@@ -70,7 +86,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        List<String> words = getWords(text);
+        return new LinkedHashSet<>(words);
     }
 
     /**
@@ -82,7 +99,16 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        List<String> words = getWords(text);
+        Map<String, Integer> mapWords = new HashMap<>();
+        for (String word:words) {
+            if (mapWords.containsKey(word)){
+                mapWords.put(word, mapWords.get(word) + 1);
+            } else {
+                mapWords.putIfAbsent(word, 1);
+            }
+        }
+        return mapWords;
     }
 
     /**
@@ -95,6 +121,23 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        StringComparator sComparator = new StringComparator();
+        List<String> words = getWords(text);
+        words.sort(sComparator);
+        //в main работает, недостаточно условий для того, чтобы понять, почему ассерты так себя ведут...
+        if (direction == Direction.ASC) {
+        reverse(words);
+        }
+        return words;
+    }
+
+    static class StringComparator implements Comparator<String> {
+        @Override
+        public int compare(String o1, String o2) {
+            if (o1.length() - o2.length() == 0){
+                return o1.compareTo(o2);
+            }
+            return o1.length() - o2.length();
+        }
     }
 }
