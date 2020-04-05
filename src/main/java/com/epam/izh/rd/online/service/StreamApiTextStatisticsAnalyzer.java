@@ -2,10 +2,11 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 
@@ -16,36 +17,63 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        List<String> list = getWords(text);
+        return list.stream().reduce(0, (sum, s) -> sum += s.length(), Integer::sum);
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        List<String> list = getWords(text);
+        return list.stream().reduce(0, (sum, s) -> sum += 1, Integer::sum);
     }
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        List<String> list = getWords(text);
+        List<String> listApi = list.stream().distinct().collect(Collectors.toList());
+        return listApi.size();
     }
 
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        Pattern pattern1 = Pattern.compile("[^A-Z a-z\n]");
+        Matcher matcher = pattern1.matcher(text);
+        String str = matcher.replaceAll("");
+        String strList[];
+        strList=str.split("[ \n]+");
+        List<String> list  = Arrays.stream(strList).collect(Collectors.toList());
+        return list;
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        Set<String> set = getWords(text).stream().collect(Collectors.toSet());
+        return set;
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        List<String> list = getWords(text);
+        Set<String> set = list.stream().collect(Collectors.toSet());
+        Map<String, Integer> map = new HashMap<>();
+        set.stream().forEach((s) -> map.put(s, counter(s, list)));
+        return map;
+    }
+
+    private int counter(String word, List<String> list) {
+        return (int) list.stream().filter(s -> s.equals(word)).count();
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        Comparator<String> comp = Comparator.comparing(String::length);
+
+        if (direction==Direction.ASC) {
+            return getWords(text).stream().sorted(comp).collect(Collectors.toList());
+        }
+        else if (direction==Direction.DESC) {
+            return getWords(text).stream().sorted(comp.reversed()).collect(Collectors.toList());
+        }
+        return null;
     }
 }
