@@ -2,10 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Collections.*;
 
@@ -16,36 +15,42 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        return getWords(text).stream().mapToInt(String::length).sum();
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).stream().mapToInt(a -> 1).sum();
     }
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return getWords(text).stream().collect(Collectors.toSet()).size();
     }
 
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return Stream.of(text.split("\\W+")).collect(Collectors.toList());
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return getWords(text).stream().collect(Collectors.toSet());
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        return getWords(text).stream().collect(Collectors.toMap(word -> word, word -> 1, Integer::sum));
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        return getWords(text).stream().sorted(getStringComparator(direction)).collect(Collectors.toList());
+    }
+
+    private Comparator<String> getStringComparator(Direction direction) {
+        return direction.equals(Direction.ASC) ?
+                Comparator.comparing(String::length) :
+                Comparator.comparing(String::length).reversed();
     }
 }
