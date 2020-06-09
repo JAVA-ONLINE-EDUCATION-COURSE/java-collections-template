@@ -1,7 +1,6 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
-
 import java.util.*;
 
 import static java.util.Collections.*;
@@ -23,7 +22,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        return text.replaceAll("[,!-.\t\n\\s;:\"')(*%#@$+=]",
+                "").length();
     }
 
     /**
@@ -34,7 +34,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return new ArrayList<>(Arrays.asList(text.split("\\W+"))).size();
     }
 
     /**
@@ -44,7 +44,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return new HashSet<>(Arrays.asList(text.split("\\W+"))).size();
     }
 
     /**
@@ -57,7 +57,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return new ArrayList<>(Arrays.asList(text.split("\\W+")));
     }
 
     /**
@@ -70,7 +70,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return new HashSet<>(Arrays.asList(text.split("\\W+")));
     }
 
     /**
@@ -82,7 +82,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map<String, Integer> amountOfWordsRepetitions = new Hashtable<>();
+
+        for (String s : getUniqueWords(text)) {
+            amountOfWordsRepetitions.put(s, Collections.frequency(getWords(text), s));
+        }
+        return amountOfWordsRepetitions;
     }
 
     /**
@@ -95,6 +100,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+
+        return null;
     }
 }
