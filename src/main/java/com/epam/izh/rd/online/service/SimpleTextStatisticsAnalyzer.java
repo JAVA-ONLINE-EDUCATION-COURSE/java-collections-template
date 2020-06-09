@@ -1,9 +1,8 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
-
 import java.util.*;
-
+import static com.epam.izh.rd.online.helper.Direction.ASC;
 import static java.util.Collections.*;
 
 /**
@@ -23,7 +22,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        if (text == null || text.length() == 0) return 0;
+        int sumLengthOfWords = 0;
+        for (String word : getWords(text)) {
+            sumLengthOfWords += word.length();
+        }
+        return sumLengthOfWords;
     }
 
     /**
@@ -34,7 +38,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        if (text == null || text.length() == 0) return 0;
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +49,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        if (text == null || text.length() == 0) return 0;
+        return getUniqueWords(text).size();
     }
 
     /**
@@ -57,7 +63,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        if (text == null || text.length() == 0) return emptyList();
+        List<String> words = new ArrayList<>();
+        for (String word : text.split("\\W")) {
+            if (!word.isEmpty()) {
+                words.add(word);
+            }
+        }
+        return words;
     }
 
     /**
@@ -70,7 +83,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        if (text == null || text.length() == 0) return emptySet();
+        return new HashSet<>(getWords(text));
     }
 
     /**
@@ -82,7 +96,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        if (text == null || text.length() == 0) return emptyMap();
+        Map<String, Integer> wordRepeats = new HashMap<>();
+        for (String word :getWords(text)) {
+            wordRepeats.putIfAbsent(word, 0);
+            wordRepeats.put(word, wordRepeats.get(word) + 1);
+        }
+        return wordRepeats;
     }
 
     /**
@@ -95,6 +115,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        if (text == null || text.length() == 0) return emptyList();
+        List<String> wordsByLength = new ArrayList<>(getWords(text));
+        wordsByLength.sort((o1, o2) -> direction == ASC ? o1.length() - o2.length() : o2.length() - o1.length());
+        return wordsByLength;
     }
 }
