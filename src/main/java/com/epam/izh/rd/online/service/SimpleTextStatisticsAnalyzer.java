@@ -104,9 +104,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        List<String> words = getWords(text);
-        words.sort(getStringComparator(direction));
-        return words;
+        List<String> sortedWords = getWords(text);
+        sortedWords.sort(getStringComparator(direction));
+        return sortedWords;
     }
 
     private Comparator<String> getStringComparator(Direction direction) {
