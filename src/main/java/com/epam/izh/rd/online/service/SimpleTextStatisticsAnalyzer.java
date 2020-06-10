@@ -1,9 +1,11 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
+
 import java.util.*;
 
-import static java.util.Collections.*;
+import static com.epam.izh.rd.online.helper.Direction.ASC;
+
 
 /**
  * Совет:
@@ -22,7 +24,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return text.replaceAll("[,!-.\t\n\\s;:\"')(*%#@$+=]",
+        return text.replaceAll("[\\p{Punct}\\s]+",
                 "").length();
     }
 
@@ -34,7 +36,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return new ArrayList<>(Arrays.asList(text.split("\\W+"))).size();
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +46,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return new HashSet<>(Arrays.asList(text.split("\\W+"))).size();
+        return new HashSet<>(getWords(text)).size();
     }
 
     /**
@@ -70,7 +72,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return new HashSet<>(Arrays.asList(text.split("\\W+")));
+        return new HashSet<>(getWords(text));
     }
 
     /**
@@ -100,7 +102,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-
-        return null;
+        List<String> wordsByLength = getWords(text);
+        if (direction.equals(ASC)) {
+            wordsByLength.sort(((o1, o2) -> o1.length() - o2.length()));
+        } else {
+            wordsByLength.sort(((o1, o2) -> -(o1.length() - o2.length())));
+        }
+        return wordsByLength;
     }
 }
+
