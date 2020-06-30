@@ -2,12 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.util.Collections.*;
 
 /**
  * Данный класс обязан использовать StreamApi из функционала Java 8. Функциональность должна быть идентична
@@ -16,36 +13,46 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        return getWords(text).stream().mapToInt(String::length).sum();
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return (int) getWords(text).stream().count();
     }
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return (int) getWords(text).stream().distinct().count();
+
     }
 
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        ArrayList<String> words = new ArrayList<>();
+        String[] wordsArray = text.split("\\W+");
+        Arrays.stream(wordsArray).forEach(words::add);
+        return words;
+
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return getWords(text).stream().collect(Collectors.toSet());
+
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        return getUniqueWords(text).stream().collect(Collectors.toMap(e -> e,
+                e -> Collections.frequency(getWords(text), e)));
+
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        return getWords(text).stream().sorted((o1, o2) -> direction == Direction.ASC ? o1.length() - o2.length() : o2.length() - o1.length())
+                .collect(Collectors.toList());
+
     }
 }
