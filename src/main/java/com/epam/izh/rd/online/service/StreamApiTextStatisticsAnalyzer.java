@@ -1,11 +1,8 @@
 package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.Collections.*;
 
 /**
  * Данный класс обязан использовать StreamApi из функционала Java 8. Функциональность должна быть идентична
@@ -29,13 +26,11 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public List<String> getWords(String text) {
-
         return Arrays.stream(text.split("\\s*\\W\\s*")).filter(x -> !x.equals("")).collect(Collectors.toList());
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-
         return getWords(text).stream().collect(Collectors.toSet());
     }
 
