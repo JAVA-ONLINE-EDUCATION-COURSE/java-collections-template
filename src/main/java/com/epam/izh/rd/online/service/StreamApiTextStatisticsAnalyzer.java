@@ -2,50 +2,48 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 
-/**
- * Данный класс обязан использовать StreamApi из функционала Java 8. Функциональность должна быть идентична
- * {@link SimpleTextStatisticsAnalyzer}.
- */
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        return getWords(text).stream().mapToInt(String::length).sum();
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).size();
     }
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return new HashSet<>(getWords(text)).size();
     }
 
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return new SimpleTextStatisticsAnalyzer().getWords(text);
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return new HashSet<>(getWords(text));
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        return new SimpleTextStatisticsAnalyzer().countNumberOfWordsRepetitions(text);
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        List<String> list = getWords(text);
+        list = list.stream()
+            .sorted(!direction.equals(Direction.ASC) ? Comparator.comparing(String::length).reversed() : Comparator.comparing(String::length))
+        .collect(Collectors.toList());
+        return list;
     }
 }
