@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
+import java.io.File;
 import java.util.*;
 
 import static java.util.Collections.*;
@@ -23,7 +24,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+
+        String str = "";
+
+        for (String x : getWords(text)){
+            str = str + x;
+        }
+
+        return str.length();
     }
 
     /**
@@ -34,7 +42,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +53,21 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+
+        List array = getWords(text);
+        int count = 1;
+
+        for (int i = 0; i < array.size() - 1; i++ ) {
+            count++;
+            for (int y = i + 1; y < array.size(); y++ ) {
+                if (array.get(i).equals(array.get(y))) {
+                    count--;
+                    break;
+                }
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -57,7 +80,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+    ArrayList<String> array = new ArrayList<>();
+
+        StringTokenizer path_array = new StringTokenizer(text, " .,\"-!;:\r\n");
+        while(path_array.hasMoreElements()) {
+        array.add(path_array.nextToken());
+
+            }
+        return array;
     }
 
     /**
@@ -70,7 +100,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+
+        Set<String> str = new HashSet<>();
+
+        for (String x : getWords(text)) {
+            str.add(x);
+        }
+
+        return str;
     }
 
     /**
@@ -82,7 +119,22 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+
+        Map<String, Integer> map = new HashMap<>();
+        List array = getWords(text);
+        Set<String> str = getUniqueWords(text);
+
+        for (String x : str) {
+            int count = 0;
+            for (int i = 0; i < array.size(); i++) {
+                if (x.equals(array.get(i))) {
+                count++;
+                }
+            }
+            map.put(x, count);
+        }
+
+        return map;
     }
 
     /**
@@ -95,6 +147,90 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+
+        List array = getWords(text);
+
+        if(direction.equals("DESC")) {
+
+            // сортируем по длинне слов
+            for (int i = 0; i < array.size(); i++) {
+
+                for (int j = 0; j < array.size(); j++) {
+
+                    if (array.get(i).toString().length() < array.get(j).toString().length()) {
+
+                        String x = array.get(j).toString();
+                        array.set(j, array.get(i));
+                        array.set(i, x);
+
+                    }
+                }
+            }
+
+            // сортируем слова одинаковой длинны в алфавитном порядке
+            for (int i = 0; i < array.size(); i++) {
+
+                for (int j = 0; j < array.size(); j++) {
+
+                    if ((array.get(i).toString().length() == array.get(j).toString().length()) && (array.get(i).toString().compareTo(array.get(j).toString()) < 0)) {
+
+                        String x = array.get(j).toString();
+                        array.set(j, array.get(i));
+                        array.set(i, x);
+
+
+                    }
+                }
+            }
+            System.out.println("DESC");
+            for (int i = 0; i < array.size(); i++) {
+
+                System.out.println(array.get(i));
+            }
+            System.out.println();
+
+            return array;
+        }
+
+        // сортируем по длинне слов
+        for (int i = 0; i < array.size(); i++) {
+
+            for (int j = 0; j < array.size(); j++) {
+
+                if (array.get(i).toString().length() > array.get(j).toString().length()) {
+
+                    String x = array.get(j).toString();
+                    array.set(j, array.get(i));
+                    array.set(i, x);
+
+                }
+            }
+        }
+
+        // сортируем слова одинаковой длинны в алфавитном порядке
+        for (int i = 0; i < array.size(); i++) {
+
+            for (int j = 0; j < array.size(); j++) {
+
+                if ((array.get(i).toString().length() == array.get(j).toString().length()) && (array.get(i).toString().compareTo(array.get(j).toString()) > 0)) {
+
+                    String x = array.get(j).toString();
+                    array.set(j, array.get(i));
+                    array.set(i, x);
+
+
+                }
+            }
+        }
+        System.out.println("ASC");
+        for (int i = 0; i < array.size(); i++) {
+
+            System.out.println(array.get(i));
+        }
+        System.out.println();
+
+        return array;
+
+
     }
 }
