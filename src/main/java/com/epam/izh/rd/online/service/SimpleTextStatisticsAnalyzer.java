@@ -148,18 +148,33 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
 
-        List array = getWords(text);
+        List<String> array = getWords(text);
 
-        if(direction.equals("DESC")) {
+        switch (direction) {
+            case ASC: {
+                System.out.println("ASC");
+                return array;
+                break;
+            }
+            case DESC: {
+                System.out.println("DESC");
+                return array;
+                break;
+            }
+        }
+
+
+        /*
+        if (direction.equals("ASC")) {
 
             // сортируем по длинне слов
             for (int i = 0; i < array.size(); i++) {
 
                 for (int j = 0; j < array.size(); j++) {
 
-                    if (array.get(i).toString().length() < array.get(j).toString().length()) {
+                    if (array.get(i).length() > array.get(j).length()) {
 
-                        String x = array.get(j).toString();
+                        String x = array.get(j);
                         array.set(j, array.get(i));
                         array.set(i, x);
 
@@ -172,9 +187,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
                 for (int j = 0; j < array.size(); j++) {
 
-                    if ((array.get(i).toString().length() == array.get(j).toString().length()) && (array.get(i).toString().compareTo(array.get(j).toString()) < 0)) {
+                    if ((array.get(i).length() == array.get(j).length()) && (array.get(i).compareTo(array.get(j)) > 0)) {
 
-                        String x = array.get(j).toString();
+                        String x = array.get(j);
                         array.set(j, array.get(i));
                         array.set(i, x);
 
@@ -182,55 +197,47 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
                     }
                 }
             }
-            System.out.println("DESC");
+            return array;
+        } else {
+
+
+            // сортируем по длинне слов
             for (int i = 0; i < array.size(); i++) {
 
-                System.out.println(array.get(i));
+                for (int j = 0; j < array.size(); j++) {
+
+                    if (array.get(i).length() < array.get(j).length()) {
+
+                        String x = array.get(j);
+                        array.set(j, array.get(i));
+                        array.set(i, x);
+
+                    }
+                }
             }
-            System.out.println();
+
+
+            // сортируем слова одинаковой длинны в алфавитном порядке
+            for (int i = 0; i < array.size(); i++) {
+
+                for (int j = 0; j < array.size(); j++) {
+
+                    if ((array.get(i).length() == array.get(j).length()) && (array.get(i).compareTo(array.get(j)) < 0)) {
+
+                        String x = array.get(j);
+                        array.set(j, array.get(i));
+                        array.set(i, x);
+
+
+                    }
+                }
+            }
+
 
             return array;
         }
-
-        // сортируем по длинне слов
-        for (int i = 0; i < array.size(); i++) {
-
-            for (int j = 0; j < array.size(); j++) {
-
-                if (array.get(i).toString().length() > array.get(j).toString().length()) {
-
-                    String x = array.get(j).toString();
-                    array.set(j, array.get(i));
-                    array.set(i, x);
-
-                }
-            }
-        }
-
-        // сортируем слова одинаковой длинны в алфавитном порядке
-        for (int i = 0; i < array.size(); i++) {
-
-            for (int j = 0; j < array.size(); j++) {
-
-                if ((array.get(i).toString().length() == array.get(j).toString().length()) && (array.get(i).toString().compareTo(array.get(j).toString()) > 0)) {
-
-                    String x = array.get(j).toString();
-                    array.set(j, array.get(i));
-                    array.set(i, x);
-
-
-                }
-            }
-        }
-        System.out.println("ASC");
-        for (int i = 0; i < array.size(); i++) {
-
-            System.out.println(array.get(i));
-        }
-        System.out.println();
-
-        return array;
-
+*/
 
     }
-}
+    }
+
