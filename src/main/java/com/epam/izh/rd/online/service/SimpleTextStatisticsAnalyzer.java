@@ -150,21 +150,6 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
         List<String> array = getWords(text);
 
-        switch (direction) {
-            case ASC: {
-                System.out.println("ASC");
-                return array;
-                break;
-            }
-            case DESC: {
-                System.out.println("DESC");
-                return array;
-                break;
-            }
-        }
-
-
-        /*
         if (direction.equals("ASC")) {
 
             // сортируем по длинне слов
@@ -199,44 +184,44 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
             }
             return array;
         } else {
+            if (direction.equals("DESC")) {
 
 
-            // сортируем по длинне слов
-            for (int i = 0; i < array.size(); i++) {
+                // сортируем по длинне слов
+                for (int i = 0; i < array.size(); i++) {
 
-                for (int j = 0; j < array.size(); j++) {
+                    for (int j = 0; j < array.size(); j++) {
 
-                    if (array.get(i).length() < array.get(j).length()) {
+                        if (array.get(i).length() < array.get(j).length()) {
 
-                        String x = array.get(j);
-                        array.set(j, array.get(i));
-                        array.set(i, x);
+                            String x = array.get(j);
+                            array.set(j, array.get(i));
+                            array.set(i, x);
 
+                        }
                     }
                 }
-            }
 
 
-            // сортируем слова одинаковой длинны в алфавитном порядке
-            for (int i = 0; i < array.size(); i++) {
+                // сортируем слова одинаковой длинны в алфавитном порядке
+                for (int i = 0; i < array.size(); i++) {
 
-                for (int j = 0; j < array.size(); j++) {
+                    for (int j = 0; j < array.size(); j++) {
 
-                    if ((array.get(i).length() == array.get(j).length()) && (array.get(i).compareTo(array.get(j)) < 0)) {
+                        if ((array.get(i).length() == array.get(j).length()) && (array.get(i).compareTo(array.get(j)) < 0)) {
 
-                        String x = array.get(j);
-                        array.set(j, array.get(i));
-                        array.set(i, x);
+                            String x = array.get(j);
+                            array.set(j, array.get(i));
+                            array.set(i, x);
 
 
+                        }
                     }
                 }
-            }
 
-
-            return array;
+                return array;
+            } else {throw new IllegalArgumentException();}
         }
-*/
 
     }
     }
