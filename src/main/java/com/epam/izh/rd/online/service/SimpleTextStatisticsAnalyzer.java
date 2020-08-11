@@ -4,6 +4,7 @@ import com.epam.izh.rd.online.helper.Direction;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 
@@ -24,14 +25,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-
-        String str = "";
-
-        for (String x : getWords(text)){
-            str = str + x;
-        }
-
-        return str.length();
+        return getWords(text).stream().collect(Collectors.joining()).length();
     }
 
     /**
