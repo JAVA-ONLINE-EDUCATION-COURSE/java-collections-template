@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -94,8 +95,15 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map keyValue = new HashMap();
+        for (String elem : getWords(text)){
+            Integer k = Collections.frequency(getWords(text),elem);
+            keyValue.put(elem,k);
+        }
+        return keyValue;
     }
+
+
 
     /**
      * Необходимо реализовать функционал вывода слов из текста в отсортированном виде (по длине) в зависимости от параметра direction.
@@ -107,6 +115,11 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+
+        List <String> sortWord = new ArrayList<>();
+        sortWord.addAll(getWords(text));
+        Collections.sort(sortWord);
+
+        return sortWord;
     }
 }
