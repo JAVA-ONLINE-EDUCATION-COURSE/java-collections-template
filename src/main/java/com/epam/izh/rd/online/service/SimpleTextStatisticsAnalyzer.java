@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.service;
 import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Collections.*;
 
@@ -23,7 +25,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        int count = text.replaceAll("\\W+", "").length();
+        return count;
     }
 
     /**
@@ -34,7 +37,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        int count  = getWords(text).size();
+        return count;
     }
 
     /**
@@ -44,7 +48,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        int count = getUniqueWords(text).size();
+        return count;
     }
 
     /**
@@ -57,7 +62,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        List<String> list = new ArrayList<>();
+        String[] splStr = text.replaceAll("\\W+", " ").split(" ");
+        for (String elem : splStr){
+            list.add(elem);
+        }
+        return list;
     }
 
     /**
@@ -70,7 +80,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        Set<String> uniq = new HashSet<>(getWords(text)) ;
+
+        return uniq;
     }
 
     /**
