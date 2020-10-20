@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 /**
  * Совет:
@@ -115,11 +115,25 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-
-        List <String> sortWord = new ArrayList<>();
-        sortWord.addAll(getWords(text));
-        Collections.sort(sortWord);
-
-        return sortWord;
+        List<String> rez2Word = new ArrayList<>();
+        String [] strArr = new String[getWords(text).size()];
+        for (int i = 0; i < getWords(text).size(); i++) {
+            strArr[i] = getWords(text).get(i);
+        }
+        for(int i=0;i<strArr.length;i++) {
+            for(int j=i+1;j<strArr.length;j++){
+                if(strArr[i].length()>strArr[j].length()){
+                    String temp= strArr[i];
+                    strArr[i]=strArr[j];
+                    strArr[j]=temp;
+                }
+            }
+        }
+        rez2Word.addAll(Arrays.asList(strArr));
+        if (direction.equals(Direction.DESC)){
+            Collections.reverse(rez2Word);
+            return rez2Word;
+        }
+        return rez2Word;
     }
 }
