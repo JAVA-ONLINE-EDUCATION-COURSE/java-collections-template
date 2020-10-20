@@ -115,11 +115,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
+        ArrayList rez = new ArrayList();
+        rez.addAll(getWords(text));
+        for(int i = 0; i < rez.size() - 1; i++) {
+            String cur = (String) rez.get(i);
+            String next = (String) rez.get(i+1);
 
-        List <String> sortWord = new ArrayList<>();
-        sortWord.addAll(getWords(text));
-        Collections.sort(sortWord);
+        }
 
-        return sortWord;
+        return emptyList();
     }
 }

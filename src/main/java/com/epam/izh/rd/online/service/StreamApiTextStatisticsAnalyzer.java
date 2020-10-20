@@ -2,10 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.*;
 
@@ -47,6 +44,16 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
+        List<String> rez = new ArrayList<>();
+        rez.addAll(getWords(text));
+        if (direction.equals(Direction.DESC)){
+            rez.sort(Comparator.comparing(String::length));
+            return rez;
+        }else if (direction.equals(Direction.ASC)){
+            rez.sort(Comparator.comparing(String::length));
+            Collections.reverse(rez);
+            return rez;
+        }
         return emptyList();
     }
 }
