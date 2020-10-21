@@ -2,10 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 
@@ -31,17 +30,22 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public List<String> getWords(String text) {
-
-        return emptyList();
+        String[] splStr = text.replaceAll("\\W+", " ").split(" ");
+        List<String> words = Arrays.stream(splStr).collect(Collectors.toList());
+        return words;
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        Set<String> uniq = getWords(text).stream().collect(Collectors.toSet());
+        return uniq;
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
+        Map keyValue = getWords(text).stream()
+                .collect(Collectors.toMap(elem -> Collections.frequency(getWords(text),elem)), Collectors.joining(":"),);
+
         return emptyMap();
     }
 
