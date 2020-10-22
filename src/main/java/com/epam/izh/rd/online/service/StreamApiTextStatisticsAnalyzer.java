@@ -3,11 +3,13 @@ package com.epam.izh.rd.online.service;
 import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.*;
+import static java.util.stream.Collectors.counting;
 
 /**
  * Данный класс обязан использовать StreamApi из функционала Java 8. Функциональность должна быть идентична
@@ -16,8 +18,8 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-
-        return 0;
+        int count =getWords(text).stream().collect(Collectors.summingInt(s->s.length()));
+        return count;
     }
 
     @Override
@@ -28,7 +30,8 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        int count = (int) getWords(text).stream().distinct().count();
+        return count;
     }
 
     @Override
@@ -46,16 +49,21 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-//        Map keyValue = getWords(text).stream()
-//                .collect(Collectors.toMap(Collections.frequency(), Collectors.joining(":"),);
 
-        return emptyMap();
+        Map keyValue = getWords(text).stream()
+                .collect(Collectors.groupingBy(String::valueOf,Collectors.counting()));
+        keyValue.values().stream().collect(Collectors.toMap(Function.identity(), i -> (int) i.in));
+
+
+
+
+
+        return cc;
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
         ArrayList<String> wordSort = new ArrayList<>();
-
         wordSort.addAll(getWords(text).stream().sorted(Comparator.comparing(String::length)).collect(Collectors.toList()));
         if (direction.equals(Direction.ASC)) {
             return wordSort;
