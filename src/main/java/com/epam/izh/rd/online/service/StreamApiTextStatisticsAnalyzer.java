@@ -44,16 +44,22 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
 //        Map keyValue = getWords(text).stream()
-//                .collect(Collectors.toMap(elem -> Collections.frequency(getWords(text),elem)), Collectors.joining(":"),);
+//                .collect(Collectors.toMap(Collections.frequency(), Collectors.joining(":"),);
 
         return emptyMap();
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        List<String> wordSort= new ArrayList<>(getWords(text));
-        wordSort.sort(Comparator.comparing(String::length));
+        ArrayList<String> wordSort = new ArrayList<>();
 
-        return wordSort;
+        wordSort.addAll(getWords(text).stream().sorted(Comparator.comparing(String::length)).collect(Collectors.toList()));
+        if (direction.equals(Direction.ASC)) {
+            return wordSort;
+        } else {
+            reverse(wordSort);
+            return wordSort;
+        }
+
     }
 }
