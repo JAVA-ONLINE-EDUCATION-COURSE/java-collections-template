@@ -3,6 +3,8 @@ package com.epam.izh.rd.online.service;
 import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 
@@ -28,32 +30,30 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public List<String> getWords(String text) {
-
-        return emptyList();
+        String[] splStr = text.replaceAll("\\W+", " ").split(" ");
+        List<String> words = Arrays.stream(splStr).collect(Collectors.toList());
+        return words;
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        Set<String> uniq = getWords(text).stream().collect(Collectors.toSet());
+        return uniq;
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
+//        Map keyValue = getWords(text).stream()
+//                .collect(Collectors.toMap(elem -> Collections.frequency(getWords(text),elem)), Collectors.joining(":"),);
+
         return emptyMap();
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        List<String> rez = new ArrayList<>();
-        rez.addAll(getWords(text));
-        if (direction.equals(Direction.DESC)){
-            rez.sort(Comparator.comparing(String::length));
-            return rez;
-        }else if (direction.equals(Direction.ASC)){
-            rez.sort(Comparator.comparing(String::length));
-            Collections.reverse(rez);
-            return rez;
-        }
-        return emptyList();
+        List<String> wordSort= new ArrayList<>(getWords(text));
+        wordSort.sort(Comparator.comparing(String::length));
+
+        return wordSort;
     }
 }
