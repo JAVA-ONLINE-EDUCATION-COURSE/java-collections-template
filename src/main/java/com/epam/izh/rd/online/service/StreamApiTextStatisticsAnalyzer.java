@@ -5,6 +5,7 @@ import com.epam.izh.rd.online.helper.Direction;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Collections.*;
 
@@ -15,12 +16,14 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
+
         return 0;
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        long count = getWords(text).stream().count();
+        return (int) count;
     }
 
     @Override
@@ -60,6 +63,5 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
             reverse(wordSort);
             return wordSort;
         }
-
     }
 }
