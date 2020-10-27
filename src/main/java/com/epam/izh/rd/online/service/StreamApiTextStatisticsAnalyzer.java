@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.*;
+import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.counting;
 
 /**
@@ -49,16 +50,7 @@ public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-
-        Map keyValue = getWords(text).stream()
-                .collect(Collectors.groupingBy(String::valueOf,Collectors.counting()));
-        keyValue.values().stream().collect(Collectors.toMap(Function.identity(), i -> (int) i.in));
-
-
-
-
-
-        return cc;
+        return getWords(text).stream().collect(Collectors.toMap(s -> s,s -> 1,Integer::sum));
     }
 
     @Override
