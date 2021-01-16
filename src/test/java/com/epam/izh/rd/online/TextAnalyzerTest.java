@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -78,7 +80,7 @@ public class TextAnalyzerTest {
 
     @Test
     @DisplayName("Тест метода TextStatisticsAnalyzer.getWords(String text)")
-    void testGetWords() {
+    void testGetWords() throws IOException, URISyntaxException {
         assertListsContainSameElements(wordsList, simpleTextStatisticsAnalyzer.getWords(text));
     }
 
@@ -126,7 +128,7 @@ public class TextAnalyzerTest {
 
     @Test
     @DisplayName("Тест метода StreamApiTextStatisticsAnalyzer.getWords(String text)")
-    void testGetWordsStream() {
+    void testGetWordsStream() throws IOException, URISyntaxException {
         assertListsContainSameElements(wordsList, streamApiTextStatisticsAnalyzer.getWords(text));
     }
 

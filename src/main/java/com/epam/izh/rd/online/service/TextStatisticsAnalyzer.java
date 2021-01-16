@@ -2,6 +2,8 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +16,7 @@ public interface TextStatisticsAnalyzer {
 
     int countNumberOfUniqueWords(String text);
 
-    List<String> getWords(String text);
+    List<String> getWords(String text) throws IOException, URISyntaxException;
 
     Set<String> getUniqueWords(String text);
 
