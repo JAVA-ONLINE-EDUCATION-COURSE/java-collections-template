@@ -2,10 +2,9 @@ package com.epam.izh.rd.online.service;
 
 import com.epam.izh.rd.online.helper.Direction;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Collections.*;
 
@@ -16,36 +15,49 @@ import static java.util.Collections.*;
 public class StreamApiTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        return Stream.of(text.split("[^\\w]+"))
+                .mapToInt((w)->w.length())
+                .sum();
     }
 
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return Stream.of(text.split("[^\\w]+"))
+                .mapToInt((w)->1)
+                .sum();
     }
 
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        return (int) Stream.of(text.split("[^\\w]+"))
+                .distinct()
+                .count();
     }
 
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return Stream.of(text.split("[^\\w]+"))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        return  Stream.of(text.split("[^\\w]+"))
+                .collect(Collectors.toSet());
     }
 
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        return Stream.of(text.split("[^\\w]+"))
+                .collect(Collectors.groupingBy(w->w,Collectors.summingInt(w->1)));
     }
 
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        return Stream.of(text.split("[^\\w]+"))
+                .sorted(direction.equals(Direction.ASC)?
+                        Comparator.comparing(String::length)
+                        : Comparator.comparing(String::length).reversed())
+                .collect(Collectors.toList());
     }
 }
