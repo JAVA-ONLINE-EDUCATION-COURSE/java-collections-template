@@ -23,7 +23,12 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        List<String> arrayListWords = getWords(text);
+        int sumLengthOfWords = 0;
+        for (String word:arrayListWords) {
+            sumLengthOfWords += word.length();
+        }
+        return sumLengthOfWords;
     }
 
     /**
@@ -34,7 +39,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        return getWords(text).size();
     }
 
     /**
@@ -44,7 +49,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+
+        return getUniqueWords(text).size();
     }
 
     /**
@@ -57,7 +63,7 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        return Arrays.asList(text.split("\\W+"));
     }
 
     /**
@@ -70,7 +76,8 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+
+        return new HashSet<>(getWords(text)) ;
     }
 
     /**
@@ -82,7 +89,16 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        Map<String, Integer> mapNumberOfWordsRepetitions = new HashMap<>();
+        List<String> listWords = getWords(text);
+        for (String word: listWords) {
+            if (mapNumberOfWordsRepetitions.containsKey(word)) {
+                mapNumberOfWordsRepetitions.put(word, mapNumberOfWordsRepetitions.get(word)+1);
+            } else {
+                mapNumberOfWordsRepetitions.put(word, 1);
+            }
+        }
+        return mapNumberOfWordsRepetitions;
     }
 
     /**
@@ -95,6 +111,26 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+
+        List<String> listWordsByLength = getWords(text);
+        listWordsByLength.sort(new ComparatorWordsByLength());
+        if (direction == Direction.DESC) {
+            Collections.reverse(listWordsByLength);
+        }
+        return listWordsByLength;
+    }
+    static class ComparatorWordsByLength implements Comparator<String> {
+
+        @Override
+        public int compare(String  a, String  b) {
+            if(a.length() > b.length()) {
+                return 1;
+            } else if(a.length()< b.length()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+
     }
 }
