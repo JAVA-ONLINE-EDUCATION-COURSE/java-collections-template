@@ -15,6 +15,8 @@ import static java.util.Collections.*;
  */
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
+    private SimpleTextStatisticsAnalyzer analyzer;
+
     /**
      * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаким препинания итд не считаются).
      * Например для текста "One, I - tWo!!" - данный метод должен вернуть 7.
@@ -23,7 +25,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        List<String> strings = analyzer.getWords(text);
+        int count = 0;
+        for (String s : strings) {
+            count += s.length();
+        }
+        return count;
     }
 
     /**
@@ -34,7 +42,13 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        List<String> strings = analyzer.getWords(text);
+        int count = 0;
+        for (String s : strings) {
+            count++;
+        }
+        return count;
     }
 
     /**
@@ -44,7 +58,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        List<String> strings = analyzer.getWords(text);
+        Set<String> setStrings = new HashSet<>(strings);
+        int count = 0;
+        for (String s : setStrings) {
+            count++;
+        }
+        return count;
     }
 
     /**
@@ -57,7 +78,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        String[] res = text.split("[\\p{Punct}\\s]+");
+        List<String> wordsLine = Arrays.asList(res);
+        return wordsLine;
     }
 
     /**
@@ -70,7 +93,10 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        List<String> strings = analyzer.getWords(text);
+        Set<String> setStrings = new HashSet<>(strings);
+        return setStrings;
     }
 
     /**
@@ -82,7 +108,14 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        Map<String, Integer> map = new TreeMap<>();
+        List<String> strings = analyzer.getWords(text);
+        for (String s : strings) {
+            int numberOfRepetitions = map.getOrDefault(s, 0) + 1;
+            map.put(s, numberOfRepetitions);
+        }
+        return map;
     }
 
     /**
@@ -95,6 +128,15 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        analyzer = new SimpleTextStatisticsAnalyzer();
+        List<String> strings = analyzer.getWords(text);
+        if (direction.equals(Direction.ASC)) {
+            Comparator<String> comparing = Comparator.comparing(String::length);
+            Collections.sort(strings, comparing);
+        } else if (direction.equals(Direction.DESC)) {
+            Comparator<String> reversed = Comparator.comparing(String::length).reversed();
+            Collections.sort(strings, reversed);
+        }
+        return strings;
     }
 }
