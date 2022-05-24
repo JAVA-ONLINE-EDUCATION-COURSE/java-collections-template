@@ -3,8 +3,8 @@ package com.epam.izh.rd.online.service;
 import com.epam.izh.rd.online.helper.Direction;
 
 import java.util.*;
-
-import static java.util.Collections.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Совет:
@@ -16,14 +16,20 @@ import static java.util.Collections.*;
 public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
 
     /**
-     * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаким препинания итд не считаются).
-     * Например для текста "One, I - tWo!!" - данный метод должен вернуть 7.
+     * Необходимо реализовать функционал подсчета суммарной длины всех слов (пробелы, знаки препинания и т.д. не считаются).
+     * Например, для текста "One, I - tWo!!" - данный метод должен вернуть 7.
      *
      * @param text текст
      */
     @Override
     public int countSumLengthOfWords(String text) {
-        return 0;
+        final List<String> listOfWords = getWords(text);
+        Iterator<String> iterateInListOfWords = listOfWords.iterator();
+        int lengthOfAllWordsInText = 0;
+        while (iterateInListOfWords.hasNext()) {
+            lengthOfAllWordsInText += iterateInListOfWords.next().length();
+        }
+        return lengthOfAllWordsInText;
     }
 
     /**
@@ -34,30 +40,39 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public int countNumberOfWords(String text) {
-        return 0;
+        final List<String> listOfWords = getWords(text);
+        return listOfWords.size();
     }
 
     /**
      * Необходимо реализовать функционал подсчета количества уникальных слов в тексте (с учетом регистра).
-     * Например для текста "One, two, three, three - one, tWo, tWo!!" - данный метод должен вернуть 5.
+     * Например, для текста "One, two, three, three - one, tWo, tWo!!" - данный метод должен вернуть 5.
      * param text текст
      */
     @Override
     public int countNumberOfUniqueWords(String text) {
-        return 0;
+        final List<String> listOfWords = getWords(text);
+        HashSet<String> onlyUniqueWords = new HashSet<>(listOfWords);
+        return onlyUniqueWords.size();
     }
 
     /**
      * Необходимо реализовать функционал получения списка слов из текста.
      * Пробелы, запятые, точки, кавычки и другие знаки препинания являются разделителями слов.
-     * Например для текста "One, two, three, three - one, tWo, tWo!!" должен вернуться список :
+     * Например для текста "One, two, three, three - one, tWo, tWo!!" должен вернуться список:
      * {"One", "two", "three", "three", "one", "tWo", "tWo"}
      *
      * @param text текст
      */
     @Override
     public List<String> getWords(String text) {
-        return emptyList();
+        final Pattern patternFindWordForWord = Pattern.compile("\\w+");
+        final Matcher matcherFindWordForWord = patternFindWordForWord.matcher(text);
+        final List<String> listOfWords = new ArrayList<>();
+        while (matcherFindWordForWord.find()) {
+            listOfWords.add(matcherFindWordForWord.group());
+        }
+        return listOfWords;
     }
 
     /**
@@ -70,7 +85,9 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Set<String> getUniqueWords(String text) {
-        return emptySet();
+        final List<String> listOfWords = getWords(text);
+        HashSet<String> onlyUniqueWords = new HashSet<>(listOfWords);
+        return onlyUniqueWords;
     }
 
     /**
@@ -82,7 +99,16 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public Map<String, Integer> countNumberOfWordsRepetitions(String text) {
-        return emptyMap();
+        final List<String> listOfWords = getWords(text);
+        Map<String, Integer> resultMap = new HashMap<>();
+        for (String elementOfList : listOfWords) {
+            if (resultMap.containsKey(elementOfList)) {
+                resultMap.put(elementOfList, resultMap.get(elementOfList) + 1);
+            } else {
+                resultMap.put(elementOfList, 1);
+            }
+        }
+        return resultMap;
     }
 
     /**
@@ -95,6 +121,17 @@ public class SimpleTextStatisticsAnalyzer implements TextStatisticsAnalyzer {
      */
     @Override
     public List<String> sortWordsByLength(String text, Direction direction) {
-        return emptyList();
+        final List<String> listOfWords = getWords(text);
+        List<String> ascDesc = listOfWords;
+        Collections.sort(ascDesc, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.length() - s2.length();
+            }
+        });
+        if (direction == Direction.DESC) {
+            Collections.reverse(ascDesc);
+        }
+        return ascDesc;
     }
 }
