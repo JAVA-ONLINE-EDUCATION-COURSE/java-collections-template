@@ -146,7 +146,7 @@ public class TextAnalyzerTest {
         List<String> result = new ArrayList<>();
 
         for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-            int wordRepetition = Integer.valueOf(entry.getValue().toString());
+            int wordRepetition = Integer.parseInt(entry.getValue().toString());
             String word = entry.getKey().toString();
 
             if (wordRepetition == 1) {
